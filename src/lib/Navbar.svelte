@@ -21,7 +21,11 @@
             title: "Blog",
             href: "/blog",
         }
-    ]
+    ];
+
+    const setTheme = (theme) => {
+        document.documentElement.dataset.theme = theme;
+    }
 
     $: routeId = $page.route.id;
     $: url = $page.url.href
@@ -38,6 +42,12 @@
                     <a {href} class:active={href === "/" ? routeId === href: url.includes(href)} {title}>{title}</a>
                 </li>
             {/each}
+            <li>
+                <a href={"#"} on:click={() => setTheme("dark")}>Dark</a>
+            </li>
+            <li>
+                <a href={"#"} on:click={() => setTheme("light")}>light</a>
+            </li>
         </ul>
     </div>
 </nav>
