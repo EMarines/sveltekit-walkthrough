@@ -1,5 +1,8 @@
 <script>
     import { page } from '$app/stores';
+    import { onMount } from 'svelte';
+    import Moon from "./icons/moon.svelte";
+    import Sun from "./icons/sun.svelte";
 
     const navs = [{
             title: "Home",
@@ -18,14 +21,38 @@
             href: "/contact",
         },
         {
+            title: "Dashboard",
+            href: "/dashboard",
+        },
+        {
+            title: "Profile",
+            href: "/profile",
+        },
+        {
             title: "Blog",
             href: "/blog",
         }
     ];
 
+    let currentTheme = "";
+    
+    onMount(() => {
+    // currentTheme = document.documentElement.dataset.theme;
+    const userPrefersDarkMode = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    const hasUserSetDarkModeManually =
+      document.documentElement.dataset.theme == "dark";
+    if (!hasUserSetDarkModeManually) {
+      setTheme(userPrefersDarkMode ? "dark" : "light");
+    }
+  });
+
     const setTheme = (theme) => {
         document.documentElement.dataset.theme = theme;
-    }
+        document.cookie = `siteTheme = ${theme}; max-age=31536000;path="/"`;
+        currentTheme = theme;
+    };
 
     $: routeId = $page.route.id;
     $: url = $page.url.href
@@ -42,12 +69,17 @@
                     <a {href} class:active={href === "/" ? routeId === href: url.includes(href)} {title}>{title}</a>
                 </li>
             {/each}
-            <li>
-                <a href={"#"} on:click={() => setTheme("dark")}>Dark</a>
-            </li>
-            <li>
-                <a href={"#"} on:click={() => setTheme("light")}>light</a>
-            </li>
+            <li class="relative">
+                {#if currentTheme == "light"}
+                  <a class="moon" href={"#"} on:click={() => setTheme("dark")}>
+                    <Moon />
+                  </a>
+                {:else}
+                  <a class="sun" href={"#"} on:click={() => setTheme("light")}>
+                    <Sun />
+                  </a>
+                {/if}
+              </li>
         </ul>
     </div>
 </nav>

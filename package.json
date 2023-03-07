@@ -19,5 +19,8 @@
 		"vite": "^4.0.0",
 		"yup": "^0.32.11"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"svelte-icons-pack": "^2.1.0"
+	}
 }
